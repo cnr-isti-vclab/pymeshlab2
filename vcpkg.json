@@ -17,6 +17,7 @@
     "embree",
     "tbb",
     "cgal",
+    "geogram",
     {
       "name": "libigl",
       "default-features": false,

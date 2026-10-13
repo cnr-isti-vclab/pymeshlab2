@@ -34,6 +34,7 @@ jobs:
       CIBW_ARCHS_MACOS: arm64
       CIBW_ARCHS_WINDOWS: AMD64
       CIBW_REPAIR_WHEEL_COMMAND_MACOS: python {project}/scripts/repair_macos_wheel.py {wheel} {dest_dir}
+      CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: delvewheel repair --include geogram_num_3rdparty.dll -w {dest_dir} -v {wheel}
       CIBW_TEST_COMMAND: python {project}/tests/wheel_smoke.py
       QT_VERSION: 6.11.*
       QT_WINDOWS_VERSION: 6.11.0
