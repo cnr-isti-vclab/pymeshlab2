@@ -25,6 +25,7 @@ if sys.platform == "darwin":
     assert (package_dir / "libgeogram_num_3rdparty.dylib").is_file()
     ctypes.CDLL("libgeogram_num_3rdparty.dylib")
 elif os.name == "nt":
+    assert (package_dir / "geogram_num_3rdparty.dll").is_file()
     ctypes.WinDLL("geogram_num_3rdparty.dll")
 quadwild_dir = package_dir / "quadwild-bimdf"
 suffix = ".exe" if os.name == "nt" else ""

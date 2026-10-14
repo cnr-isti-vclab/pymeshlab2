@@ -113,6 +113,29 @@ def bundle_geogram_num(package_dir: Path) -> None:
     command("codesign", "--force", "--sign", "-", str(bundled))
 
 
+def bundle_geogram(package_dir: Path) -> None:
+    extension = next(package_dir.glob("_meshlab*.so"))
+    dependency = next(
+        (name for name in dependencies(extension) if name.startswith("@rpath/libgeogram.")),
+        None,
+    )
+    if dependency is None:
+        raise RuntimeError("Geogram dependency not found in Python extension")
+
+    library_name = Path(dependency).name
+    installed = Path(os.environ["VCPKG_INSTALLED_DIR"])
+    triplet = os.environ["VCPKG_TARGET_TRIPLET"]
+    source = installed / triplet / "lib" / library_name
+    if not source.is_file():
+        raise FileNotFoundError(f"Geogram library not found: {source}")
+
+    bundled = package_dir / library_name
+    shutil.copy2(source.resolve(), bundled)
+    command("install_name_tool", "-change", dependency, f"@loader_path/{library_name}", str(extension))
+    command("codesign", "--force", "--sign", "-", str(extension))
+    command("codesign", "--force", "--sign", "-", str(bundled))
+
+
 def extract_wheel(wheel: Path, destination: Path) -> Path:
     with zipfile.ZipFile(wheel) as archive:
         archive.extractall(destination)
@@ -159,6 +182,7 @@ def main() -> None:
         root = extract_wheel(wheel, Path(temporary) / "wheel")
         package_dir = root / "pymeshlab2"
         bundle_qt_frameworks(package_dir, qt_root)
+        bundle_geogram(package_dir)
         bundle_geogram_num(package_dir)
         intermediate = Path(temporary) / wheel.name
         pack_wheel(root, intermediate)

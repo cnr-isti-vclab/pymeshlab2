@@ -84,4 +84,13 @@ if (SKBUILD)
             RENAME LICENSE.txt
         )
     endif()
+
+    if (WIN32 AND TARGET MeshLab2PluginFilterGeogram)
+        set(_geogram_num_dll
+            "${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/geogram_num_3rdparty.dll")
+        if (NOT EXISTS "${_geogram_num_dll}")
+            message(FATAL_ERROR "Geogram runtime library not found: ${_geogram_num_dll}")
+        endif()
+        install(FILES "${_geogram_num_dll}" DESTINATION pymeshlab2)
+    endif()
 endif()
