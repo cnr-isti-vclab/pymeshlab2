@@ -1,3 +1,15 @@
+pymeshlab2 (archived)
+=====================
+
+This repository is archived. The ``pymeshlab2`` wheel is now built from the
+MeshLab repository itself, https://github.com/cnr-isti-vclab/meshlab2
+(``pyproject.toml`` and ``python/``), and its wheels are attached to that
+repository's releases: https://github.com/cnr-isti-vclab/meshlab2/release
+
+
+----
+
+
 pymeshlab2
 =========
 
